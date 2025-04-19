@@ -148,36 +148,27 @@ const MessagePage = () => {
 
   return (
     <div style={{ backgroundImage : `url(${backgroundImage})`}} className='bg-no-repeat bg-cover'>
-          <header className='sticky top-0 h-16 bg-white flex justify-between items-center px-4'>
-              <div className='flex items-center gap-4'>
-                  <Link to={"/"} className='lg:hidden'>
-                      <FaAngleLeft size={25}/>
-                  </Link>
-                  <div>
-                      <Avatar
-                        width={50}
-                        height={50}
-                        imageUrl={dataUser?.profile_pic}
-                        name={dataUser?.name}
-                        userId={dataUser?._id}
-                      />
-                  </div>
-                  <div>
-                     <h3 className='font-semibold text-lg my-0 text-ellipsis line-clamp-1'>{dataUser?.name}</h3>
-                     <p className='-my-2 text-sm'>
-                      {
-                        dataUser.online ? <span className='text-primary'>online</span> : <span className='text-slate-400'>offline</span>
-                      }
-                     </p>
-                  </div>
-              </div>
-
-              <div >
-                    <button className='cursor-pointer hover:text-primary'>
-                      <HiDotsVertical/>
-                    </button>
-              </div>
-          </header>
+          <header className='sticky top-0 h-16 bg-white flex items-center gap-4 px-4 shadow'>
+  <Link to="/" className='flex items-center justify-center w-10 h-10 rounded-full hover:bg-slate-100 mr-2'>
+    <FaAngleLeft size={25} />
+  </Link>
+  <Avatar
+    width={50}
+    height={50}
+    imageUrl={dataUser?.profile_pic}
+    name={dataUser?.name}
+    userId={dataUser?._id}
+  />
+  <div className='flex flex-col flex-1 min-w-0'>
+    <h3 className='font-semibold text-lg my-0 text-ellipsis line-clamp-1'>{dataUser?.name}</h3>
+    <p className='-my-2 text-sm'>
+      {dataUser.online ? <span className='text-primary'>online</span> : <span className='text-slate-400'>offline</span>}
+    </p>
+  </div>
+  <button className='cursor-pointer hover:text-primary'>
+    <HiDotsVertical/>
+  </button>
+</header>
 
           {/***show all message */}
           <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll scrollbar relative bg-slate-200 bg-opacity-50'>

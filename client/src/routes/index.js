@@ -13,6 +13,7 @@ import AdminDashboard from "../pages/AdminDashboard";
 import BroadcastPage from "../pages/BroadcastPage";
 import LoginPage from "../pages/LoginPage";
 import PrivateRoute from "../components/PrivateRoute";
+import GroupChatPage from "../pages/GroupChatPage";
 
 const router = createBrowserRouter([
     {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
                             {
                                 path: "broadcast",
                                 element: <BroadcastPage/>
+                            },
+                            {
+                                path: "group/:groupId",
+                                element: <GroupChatPage />
                             }
                         ]
                     }

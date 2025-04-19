@@ -130,22 +130,18 @@ const BroadcastPage = () => {
 
   return (
     <div style={{ backgroundImage: `url(${backgroundImage})`}} className='bg-no-repeat bg-cover'>
-          <header className='sticky top-0 h-16 bg-white flex justify-between items-center px-4'>
-              <div className='flex items-center gap-4'>
-                  <Link to={"/"} className='lg:hidden'>
-                      <FaAngleLeft size={25}/>
-                  </Link>
-                  <div>
-                      <div className="w-[50px] h-[50px] bg-primary text-white rounded-full flex items-center justify-center">
-                        <MdCampaign size={30} />
-                      </div>
-                  </div>
-                  <div>
-                     <h3 className='font-semibold text-lg my-0 text-ellipsis line-clamp-1'>Broadcast Messages</h3>
-                     <p className='-my-2 text-sm text-slate-400'>Messages visible to all users</p>
-                  </div>
-              </div>
-          </header>
+          <header className='sticky top-0 h-16 bg-white flex items-center gap-4 px-4 shadow'>
+  <Link to="/" className='flex items-center justify-center w-10 h-10 rounded-full hover:bg-slate-100 mr-2'>
+    <FaAngleLeft size={25} />
+  </Link>
+  <div className="w-[50px] h-[50px] bg-primary text-white rounded-full flex items-center justify-center">
+    <MdCampaign size={30} />
+  </div>
+  <div className='flex flex-col flex-1 min-w-0'>
+    <h3 className='font-semibold text-lg my-0 text-ellipsis line-clamp-1'>Broadcast Messages</h3>
+    <p className='-my-2 text-sm text-slate-400'>Messages visible to all users</p>
+  </div>
+</header>
 
           {/***show all message */}
           <section className='h-[calc(100vh-128px)] overflow-x-hidden overflow-y-scroll scrollbar relative bg-slate-200 bg-opacity-50'>
@@ -154,31 +150,16 @@ const BroadcastPage = () => {
                     {
                       allMessage.map((msg,index)=>{
                         return(
-                          <div key={msg._id} className={`p-1 py-1 rounded w-fit max-w-[280px] md:max-w-sm lg:max-w-md ${user._id === msg?.sender?._id ? "ml-auto bg-teal-100" : "bg-white"}`}>
-                            <div className='w-full relative'>
-                              {
-                                msg?.imageUrl && (
-                                  <img 
-                                    src={msg?.imageUrl}
-                                    className='w-full h-full object-scale-down'
-                                    alt="broadcast"
-                                  />
-                                )
-                              }
-                              {
-                                msg?.videoUrl && (
-                                    <video controls className='w-full h-full'>
-                                        <source src={msg?.videoUrl} />
-                                    </video>
-                                )
-                              }
-                              <p className='p-2'>{msg?.text}</p>
-                              <div className='flex justify-between items-center px-2 text-xs text-slate-500'>
-                                <span>{msg?.sender?.name}</span>
-                                <span>{moment(msg?.createdAt).format('hh:mm A')}</span>
-                              </div>
-                            </div>
-                          </div>
+                           <div key={msg._id} className={`max-w-xs p-2 rounded-lg ${user._id === msg?.sender?._id ? 'bg-[#d9fdd3] ml-auto' : 'bg-white'}`}>
+                             <div className="flex items-center gap-2 mb-1">
+                               <Avatar name={msg?.sender?.name} imageUrl={msg?.sender?.profile_pic} width={24} height={24} />
+                               <span className="font-semibold text-xs">{msg?.sender?.name}</span>
+                             </div>
+                             {msg.imageUrl && <div className="mb-1"><FaImage className="inline mr-1" /> <img src={msg.imageUrl} alt="broadcast-img" className="w-full h-full object-scale-down" /></div>}
+                             {msg.videoUrl && <div className="mb-1"><FaVideo className="inline mr-1" /> <video src={msg.videoUrl} controls className="w-full h-full object-scale-down" /></div>}
+                             <div>{msg.text}</div>
+                             <div className="text-xs text-gray-400 mt-1">{moment(msg?.createdAt).format('hh:mm A')}</div>
+                           </div>
                         )
                       })
                     }

@@ -11,6 +11,7 @@ const resendOTP = require('../controller/resendOTP')
 const sendOTP = require('../controller/sendOTP')
 const { getAllUsers, updateUserStatus, deleteUser, isAdmin } = require('../controller/adminController')
 const { forgotPassword, resetPassword } = require('../controllers/authController')
+const groupRoutes = require('./groupRoutes')
 
 const router = express.Router()
 
@@ -43,5 +44,8 @@ router.post('/reset-password', resetPassword)
 router.get('/admin/users', isAdmin, getAllUsers)
 router.post('/admin/update-user-status', isAdmin, updateUserStatus)
 router.delete('/admin/user/:id', isAdmin, deleteUser)
+
+// Group chat routes
+router.use('/groups', groupRoutes)
 
 module.exports = router
