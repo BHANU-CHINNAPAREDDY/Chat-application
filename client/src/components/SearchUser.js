@@ -6,6 +6,8 @@ import toast from 'react-hot-toast'
 import axios from 'axios';
 import { IoClose } from "react-icons/io5";
 
+import { useSelector } from 'react-redux';
+
 const SearchUser = ({onClose}) => {
     const [searchUser, setSearchUser] = useState([])
     const [loading, setLoading] = useState(false)
@@ -48,6 +50,17 @@ const SearchUser = ({onClose}) => {
         return () => clearTimeout(timer)
     }, [search])
 
+    // Get online users from redux
+    const onlineUser = useSelector(state => state.user.onlineUser);
+
+    // Sort users: online users first
+    const sortedUsers = [...searchUser].sort((a, b) => {
+        const aOnline = onlineUser.includes(a._id);
+        const bOnline = onlineUser.includes(b._id);
+        if (aOnline === bOnline) return 0;
+        return aOnline ? -1 : 1;
+    });
+
     return (
         <div className='fixed top-0 bottom-0 left-0 right-0 bg-slate-700 bg-opacity-40 p-2 z-10'>
             <div className='w-full max-w-lg mx-auto mt-10'>
@@ -87,7 +100,7 @@ const SearchUser = ({onClose}) => {
                             </div>
                         ) : searchUser.length > 0 ? (
                             <div className='p-2 space-y-2'>
-                                {searchUser.map((user) => (
+                                {sortedUsers.map((user) => (
                                     <UserSearchCard key={user._id} user={user} onClose={onClose} />
                                 ))}
                             </div>

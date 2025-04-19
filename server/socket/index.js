@@ -7,6 +7,8 @@ const { ConversationModel,MessageModel } = require('../models/ConversationModel'
 const BroadcastModel = require('../models/BroadcastModel')
 const getConversation = require('../helpers/getConversation')
 const getBroadcastConversation = require('../helpers/getBroadcastConversation')
+const GroupModel = require('../models/GroupModel')
+const { createGroup, addGroupMessage, getGroupMessages } = require('../helpers/groupChat')
 
 const app = express()
 
@@ -46,6 +48,12 @@ io.on('connection',async(socket)=>{
     socket.join(user._id.toString())
     onlineUser.add(user._id.toString())
 
+    // Join all group rooms the user is a member of
+    const userGroups = await GroupModel.find({ members: user._id })
+    userGroups.forEach(group => {
+        socket.join(group._id.toString())
+    })
+
     io.emit('onlineUser',Array.from(onlineUser))
 
     socket.on('message-page',async(userId)=>{
@@ -83,6 +91,53 @@ io.on('connection',async(socket)=>{
         const broadcastConv = await getBroadcastConversation(user?._id)
         const allConversations = broadcastConv ? [broadcastConv, ...conversation] : conversation
         socket.emit('conversation', allConversations)
+    })
+
+    // GROUP CHAT EVENTS
+    // Create a group
+    socket.on('create-group', async ({ groupName, memberIds }, callback) => {
+        try {
+            const group = await createGroup({ groupName, creatorId: user._id, memberIds })
+            // Join the creator to the group room
+            socket.join(group._id.toString())
+            // Emit to creator and optionally all members
+            io.to(group._id.toString()).emit('group-created', group)
+            if (callback) callback({ success: true, group })
+        } catch (err) {
+            if (callback) callback({ success: false, error: err.message })
+        }
+    })
+
+    // Send a message to a group
+    socket.on('group-message', async ({ groupId, text, imageUrl, videoUrl }, callback) => {
+        try {
+            const message = await addGroupMessage({ groupId, senderId: user._id, text, imageUrl, videoUrl })
+            // Emit to all group members
+            io.to(groupId).emit('group-message', { groupId, message })
+            if (callback) callback({ success: true, message })
+        } catch (err) {
+            if (callback) callback({ success: false, error: err.message })
+        }
+    })
+
+    // Fetch messages for a group
+    socket.on('get-group-messages', async (groupId, callback) => {
+        try {
+            const messages = await getGroupMessages(groupId)
+            if (callback) callback({ success: true, messages })
+        } catch (err) {
+            if (callback) callback({ success: false, error: err.message })
+        }
+    })
+
+    // Join a group room
+    socket.on('join-group', async (groupId) => {
+        socket.join(groupId)
+    })
+
+    // Leave a group room
+    socket.on('leave-group', async (groupId) => {
+        socket.leave(groupId)
     })
 
     // Broadcast page
