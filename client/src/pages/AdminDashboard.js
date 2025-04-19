@@ -62,7 +62,7 @@ const AdminDashboard = () => {
             dispatch(logout());
             
             // Redirect to login
-            navigate('/email');
+            navigate('/login');
             
             toast.success('Signed out successfully');
         } catch (error) {

@@ -153,7 +153,7 @@ const RegisterPage = () => {
 
           <form className='grid gap-4 mt-5' onSubmit={handleSubmit}>
               <div className='flex flex-col gap-1'>
-                <label htmlFor='name'>Name :</label>
+                <label htmlFor='name'>Name <span style={{color : "red"}}>*</span>:</label>
                 <input
                   type='text'
                   id='name'
@@ -168,7 +168,7 @@ const RegisterPage = () => {
               </div>
 
               <div className='flex flex-col gap-1'>
-                <label htmlFor='email'>Email :</label>
+                <label htmlFor='email'>Email <span style={{color : "red"}}>*</span>:</label>
                 <input
                   type='email'
                   id='email'
@@ -191,7 +191,7 @@ const RegisterPage = () => {
               )}
 
               <div className='flex flex-col gap-1'>
-                <label htmlFor='password'>Password :</label>
+                <label htmlFor='password'>Password<span style={{color : "red"}}>*</span> :</label>
                 <input
                   type='password'
                   id='password'
@@ -237,7 +237,7 @@ const RegisterPage = () => {
                 Register
               </button>
 
-              <p>Already have account ? <Link to="/email" className='text-primary'>Login</Link></p>
+              <p>Already have account ? <Link to="/login" className='text-primary'>Login</Link></p>
           </form>
         </div>
     </div>

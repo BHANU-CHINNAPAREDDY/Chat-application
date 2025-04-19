@@ -11,6 +11,8 @@ import ResetPassword from "../pages/ResetPassword";
 import AdminRoute from "../components/AdminRoute";
 import AdminDashboard from "../pages/AdminDashboard";
 import BroadcastPage from "../pages/BroadcastPage";
+import LoginPage from "../pages/LoginPage";
+import PrivateRoute from "../components/PrivateRoute";
 
 const router = createBrowserRouter([
     {
@@ -22,12 +24,16 @@ const router = createBrowserRouter([
                 element: <AuthLayouts><RegisterPage/></AuthLayouts>
             },
             {
+                path: "login",
+                element: <AuthLayouts><LoginPage/></AuthLayouts>
+            },
+            {
                 path: "email",
-                element: <AuthLayouts><CheckEmailPage/></AuthLayouts>
+                element: <AuthLayouts><LoginPage/></AuthLayouts>
             },
             {
                 path: "password",
-                element: <AuthLayouts><CheckPasswordPage/></AuthLayouts>
+                element: <AuthLayouts><LoginPage/></AuthLayouts>
             },
             {
                 path: "forgot-password",
@@ -38,16 +44,21 @@ const router = createBrowserRouter([
                 element: <AuthLayouts><ResetPassword/></AuthLayouts>
             },
             {
-                path: "",
-                element: <Home/>,
+                element: <PrivateRoute/>,
                 children: [
                     {
-                        path: ":userId",
-                        element: <MessagePage/>
-                    },
-                    {
-                        path: "broadcast",
-                        element: <BroadcastPage/>
+                        path: "",
+                        element: <Home/>,
+                        children: [
+                            {
+                                path: ":userId",
+                                element: <MessagePage/>
+                            },
+                            {
+                                path: "broadcast",
+                                element: <BroadcastPage/>
+                            }
+                        ]
                     }
                 ]
             }
