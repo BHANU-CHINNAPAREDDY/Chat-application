@@ -83,7 +83,7 @@ const ResetPassword = () => {
                             type='password'
                             value={password}
                             onChange={handlePasswordChange}
-                            className='w-full p-3 border rounded focus:outline-none focus:border-blue-500'
+                            className='w-full p-3 border rounded focus:outline-none focus:border-primary'
                             placeholder='Enter new password'
                             required
                         />
@@ -99,7 +99,7 @@ const ResetPassword = () => {
                             type='password'
                             value={confirmPassword}
                             onChange={handleConfirmPasswordChange}
-                            className='w-full p-3 border rounded focus:outline-none focus:border-blue-500'
+                            className='w-full p-3 border rounded focus:outline-none focus:border-primary'
                             placeholder='Confirm new password'
                             required
                         />
@@ -110,7 +110,7 @@ const ResetPassword = () => {
                     <button
                         type='submit'
                         disabled={loading}
-                        className='w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition-colors disabled:bg-gray-400'
+                        className='w-full bg-primary text-white p-3 rounded hover:bg-secondary transition-colors disabled:bg-gray-400'
                     >
                         {loading ? <Loading /> : 'Reset Password'}
                     </button>

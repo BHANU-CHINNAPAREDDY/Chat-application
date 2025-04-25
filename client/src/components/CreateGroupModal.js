@@ -106,7 +106,7 @@ setAllUsers(res.users.filter(u =>
         </div>
         {error && <div className="text-red-600 text-xs mb-2">{error}</div>}
         <div className="flex gap-2 mt-2">
-          <button className="bg-blue-600 text-white px-4 py-1 rounded" onClick={handleCreate} disabled={loading}>Create</button>
+          <button className="bg-primary text-white px-4 py-1 rounded" onClick={handleCreate} disabled={loading}>Create</button>
           <button className="px-4 py-1 border rounded" onClick={onClose}>Cancel</button>
         </div>
       </div>

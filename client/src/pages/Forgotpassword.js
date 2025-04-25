@@ -38,7 +38,7 @@ const ForgotPassword = () => {
                             type='email'
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className='w-full p-3 border rounded focus:outline-none focus:border-blue-500'
+                            className='w-full p-3 border rounded focus:outline-none focus:border-secondary'
                             placeholder='Enter your email'
                             required
                         />
@@ -46,7 +46,7 @@ const ForgotPassword = () => {
                     <button
                         type='submit'
                         disabled={loading}
-                        className='w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 transition-colors disabled:bg-gray-400'
+                        className='w-full bg-primary text-white p-3 rounded hover:bg-secondary transition-colors disabled:bg-gray-400'
                     >
                         {loading ? <Loading /> : 'Send Reset Link'}
                     </button>
