@@ -97,9 +97,71 @@ const sendPasswordResetEmail = async (email, resetToken) => {
     }
 };
 
+// Send status update email to user (improved template)
+const sendStatusUpdateEmail = async (email, status, message) => {
+    try {
+        let subject = '';
+        let html = '';
+        if (status === 'approved') {
+            subject = 'Registration Approved - Chat Application';
+            html = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #4CAF50;">Registration Approved</h2>
+                    <p>Dear user,</p>
+                    <p>Congratulations! Your registration has been <b>approved</b> by the admin. You can now log in and use the chat app.</p>
+                    <p>If you have any questions, please contact support.</p>
+                    <br>
+                    <p>Best regards,<br>Chat Application Team</p>
+                </div>
+            `;
+        } else if (status === 'rejected') {
+            subject = 'Registration Rejected - Chat Application';
+            html = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #d32f2f;">Registration Rejected</h2>
+                    <p>Dear user,</p>
+                    <p>We regret to inform you that your registration has been <b>rejected</b> by the admin. Please contact support for more information.</p>
+                    <br>
+                    <p>Best regards,<br>Chat Application Team</p>
+                </div>
+            `;
+        } else if (status === 'deleted') {
+            subject = 'Account Deleted - Chat Application';
+            html = `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #d32f2f;">Account Deleted</h2>
+                    <p>Dear user,</p>
+                    <p>Your registration/account has been <b>deleted</b> by the admin. If you believe this is a mistake, please contact support.</p>
+                    <br>
+                    <p>Best regards,<br>Chat Application Team</p>
+                </div>
+            `;
+        } else {
+            subject = 'Registration Status Update - Chat Application';
+            html = `<div><p>${message}</p></div>`;
+        }
+        const mailOptions = {
+            from: {
+                name: 'Chat Application',
+                address: 'bhanu33725@gmail.com'
+            },
+            to: email,
+            subject,
+            html
+        };
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Status update email sent:', info.response);
+        return true;
+    } catch (error) {
+        console.error('Error sending status update email:', error);
+        return false;
+    }
+};
+
 module.exports = {
     generateOTP,
     sendOTPEmail,
     generateResetToken,
-    sendPasswordResetEmail
+    sendPasswordResetEmail,
+    sendStatusUpdateEmail
 };

@@ -1,5 +1,6 @@
 const UserModel = require('../models/UserModel');
 const jwt = require('jsonwebtoken');
+const { sendStatusUpdateEmail } = require('../utils/emailService');
 
 // Middleware to check if user is admin
 const isAdmin = async (req, res, next) => {
@@ -71,6 +72,15 @@ const updateUserStatus = async (req, res) => {
         user.isApproved = action === 'approved';
         await user.save();
 
+        // Send email notification to user
+        let statusMessage = '';
+        if (action === 'approved') {
+            statusMessage = 'Congratulations! Your registration has been approved by the admin. You can now log in and use the chat app.';
+        } else if (action === 'rejected') {
+            statusMessage = 'We regret to inform you that your registration has been rejected by the admin. Please contact support for more information.';
+        }
+        await sendStatusUpdateEmail(user.email, action, statusMessage);
+
         // Return updated user lists
         const [pendingUsers, approvedUsers, rejectedUsers] = await Promise.all([
             UserModel.find({ status: 'pending' }).select('-password').sort({ createdAt: -1 }),
@@ -93,7 +103,8 @@ const updateUserStatus = async (req, res) => {
 
 // Delete user
 const deleteUser = async (req, res) => {
-    const { userId } = req.params;
+    // Fix: Use req.params.id, not req.params.userId
+    const userId = req.params.id;
 
     try {
         const user = await UserModel.findById(userId);
@@ -106,6 +117,10 @@ const deleteUser = async (req, res) => {
         }
 
         await UserModel.findByIdAndDelete(userId);
+
+        // Send email notification to user
+        const statusMessage = 'Your registration/account has been deleted by the admin. If you believe this is a mistake, please contact support.';
+        await sendStatusUpdateEmail(user.email, 'deleted', statusMessage);
 
         // Return updated user lists
         const [pendingUsers, approvedUsers, rejectedUsers] = await Promise.all([

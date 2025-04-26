@@ -123,8 +123,6 @@ const RegisterPage = () => {
         const response = await axios.post(URL,data)
         console.log("response",response)
 
-        toast.success(response.data.message)
-
         if(response.data.success){
             setData({
               name : "",
@@ -132,8 +130,10 @@ const RegisterPage = () => {
               password : "",
               profile_pic : ""
             })
-
-            navigate('/email')
+            toast.success("User registration successful. Waiting for admin approval.")
+            navigate('/login')
+        } else {
+            toast.error(response.data.message)
         }
     } catch (error) {
         toast.error(error?.response?.data?.message)
