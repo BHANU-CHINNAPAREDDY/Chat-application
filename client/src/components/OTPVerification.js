@@ -6,6 +6,7 @@ const OTPVerification = ({ email, onVerificationSuccess }) => {
     const [otp, setOtp] = useState('');
     const [loading, setLoading] = useState(false);
     const [userId, setUserId] = useState('');
+    const [isVerified, setIsVerified] = useState(false);
 
     const handleSendOTP = async () => {
         try {
@@ -37,6 +38,7 @@ const OTPVerification = ({ email, onVerificationSuccess }) => {
             
             if (response.data.success) {
                 toast.success('Email verified successfully');
+                setIsVerified(true); 
                 onVerificationSuccess();
             }
         } catch (error) {
@@ -73,12 +75,13 @@ const OTPVerification = ({ email, onVerificationSuccess }) => {
                         placeholder="Enter 6-digit code"
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
+                        disabled={isVerified}
                     />
                     {!userId && (
                         <button
                             type="button"
                             onClick={handleSendOTP}
-                            disabled={loading}
+                            disabled={loading || isVerified}
                             className="bg-primary text-white px-4 py-1 rounded hover:bg-primary/90 disabled:bg-gray-400"
                         >
                             Send OTP
@@ -92,7 +95,7 @@ const OTPVerification = ({ email, onVerificationSuccess }) => {
                     <button
                         type="button"
                         onClick={handleVerifyOTP}
-                        disabled={loading || !otp}
+                        disabled={loading || !otp || isVerified}
                         className="bg-primary text-white px-4 py-1 rounded hover:bg-primary/90 disabled:bg-gray-400 flex-1"
                     >
                         Verify OTP
@@ -100,7 +103,7 @@ const OTPVerification = ({ email, onVerificationSuccess }) => {
                     <button
                         type="button"
                         onClick={handleResendOTP}
-                        disabled={loading}
+                        disabled={loading || isVerified}
                         className="bg-gray-500 text-white px-4 py-1 rounded hover:bg-gray-600 disabled:bg-gray-400"
                     >
                         Resend
